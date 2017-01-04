@@ -31,6 +31,8 @@ var Main = (function (_super) {
     function Main() {
         _super.call(this);
         this.list = new CommandList();
+        this.panel = new Panel();
+        this.bagState = false;
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
     }
     var d = __define,c=Main,p=c.prototype;
@@ -113,31 +115,27 @@ var Main = (function (_super) {
         // }, this, 6000)
         /////////////////////背包按钮
         var bag = new egret.TextField;
-        var bagState = false;
         bag.text = "bag";
         bag.x = 900;
         bag.y = 900;
         bag.textColor = 0x000000;
         this.addChild(bag);
-        var panel = new Panel();
+        this.panel.touchEnabled = true;
         bag.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
-            if (bagState == false) {
-                _this.addChild(panel);
-                bagState = true;
+            if (_this.bagState == false) {
+                _this.addChild(_this.panel);
+                _this.bagState = true;
             }
-            else if (bagState == true) {
-                _this.removeChild(panel);
-                bagState = false;
+            else if (_this.bagState == true) {
+                _this.removeChild(_this.panel);
+                _this.bagState = false;
             }
         }, this);
         bag.touchEnabled = true;
-    };
-    p.onButtonClick = function (e) {
-        TaskService.getInstance().taskList[1]._current++;
-        console.log(TaskService.getInstance().taskList[1]._current);
-        if (TaskService.getInstance().taskList[1]._current == 10) {
-            TaskService.getInstance().finish(TaskService.getInstance().taskList[1].id);
-        }
+        this.killCount = new egret.TextField;
+        this.killCount.text = "Killed 0";
+        this.killCount.y = 50;
+        this.addChild(this.killCount);
     };
     /**
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
@@ -162,27 +160,14 @@ var CommandList = (function () {
         this._list.push(command);
     };
     p.cancel = function () {
-        var _this = this;
-        this._frozen = true;
-        var command = this.currentCommand;
-        egret.setTimeout(function () {
-            if (_this._frozen) {
-                _this._frozen = false;
-            }
-        }, this, 2000);
-        if (command) {
-            command.cancel(function () {
-                _this._frozen = false;
-            });
-            this._list = [];
-        }
+        //this.currentCommand=this._list.pop();
+        this._list = [];
+        // this.currentCommand.cancel(()=>{
+        //     console.log("///////////////////////////////")
+        // });
     };
     p.execute = function () {
         var _this = this;
-        if (this._frozen) {
-            egret.setTimeout(this.execute, this, 100);
-            return;
-        }
         var command = this._list.shift();
         this.currentCommand = command;
         if (command) {

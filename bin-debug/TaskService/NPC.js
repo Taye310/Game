@@ -21,24 +21,24 @@ var NPC = (function (_super) {
         for (var i = 0; i < TaskService.getInstance().taskList.length; i++) {
             if (this._id == TaskService.getInstance().taskList[i].fromNPCId) {
                 this._emoji.texture = RES.getRes("ytanhao_png");
-                console.log("emoji");
             }
         }
         this._emoji.touchEnabled = true;
         this._chara.touchEnabled = true;
-        console.log("npc");
         this.addChild(this._chara);
         this.addChild(this._emoji);
         TaskService.addObserver(this);
     }
     var d = __define,c=NPC,p=c.prototype;
     p.onNPCClick = function (e) {
-        var startx = Math.floor((GameScene.chara._body.x) / 100);
+        var startx = Math.floor((GameScene.chara._body.x + 50) / 100);
         var starty = Math.floor(GameScene.chara._body.y / 100);
         var endx = Math.floor(e.stageX / 100);
         var endy = Math.floor(e.stageY / 100);
         var path = GameScene.map.astarPath(startx - 1, starty, endx, endy);
-        this._main.list.addCommand(new WalkCommand(GameScene.chara, e.localX, e.localY, path));
+        if (path.length != 0) {
+            this._main.list.addCommand(new WalkCommand(GameScene.chara, e.localX, e.localY, path));
+        }
         //console.log(endx);
         this._main.list.addCommand(new TalkCommand(this));
         this._main.list.execute();

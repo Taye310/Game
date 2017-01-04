@@ -8,19 +8,26 @@ var GameScene = (function () {
                 GameScene.chara = new Character(main);
                 main.addChild(GameScene.chara);
                 GameScene.chara.idle();
-                main.stage.addEventListener(egret.TouchEvent.TOUCH_TAP, function (e) {
-                    var startx = Math.floor((GameScene.chara._body.x) / 100);
+                GameScene.map.addEventListener(egret.TouchEvent.TOUCH_TAP, function (e) {
+                    if (main.bagState == true) {
+                        main.removeChild(main.panel);
+                        main.bagState = false;
+                    }
+                    var startx = Math.floor((GameScene.chara._body.x + 50) / 100);
                     var starty = Math.floor(GameScene.chara._body.y / 100);
                     var endx = Math.floor(e.localX / 100);
                     var endy = Math.floor(e.localY / 100);
                     var path = GameScene.map.astarPath(startx - 1, starty, endx, endy);
                     //console.log(endx);
-                    if (path.length > 0) {
+                    if (path.length > 1) {
                         //chara.move(e.localX, e.localY, path);
+                        main.list.cancel();
+                        //egret.Tween.removeAllTweens();
                         main.list.addCommand(new WalkCommand(GameScene.chara, e.localX, e.localY, path));
                         main.list.execute();
                     }
                 }, this);
+                GameScene.map.touchEnabled = true;
                 //main.stage.touchEnabled=true;
                 /////////////////////////////////////////////////////////////////
                 var taskList = new Array();
@@ -48,11 +55,20 @@ var GameScene = (function () {
                 // }
                 var killButton = new egret.TextField;
                 killButton.x = 300;
-                killButton.y = 1000;
+                killButton.y = 700;
                 killButton.textColor = 0x000000;
-                killButton.text = "KILL MONSTER!!";
+                killButton.text = "MONSTER";
                 main.addChild(killButton);
-                killButton.addEventListener(egret.TouchEvent.TOUCH_TAP, main.onButtonClick, this);
+                killButton.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
+                    if (TaskService.getInstance().taskList[1].status == TaskStatus.DURING) {
+                        TaskService.getInstance().taskList[1]._current++;
+                        main.killCount.text = "Killed " + TaskService.getInstance().taskList[1]._current;
+                        console.log(TaskService.getInstance().taskList[1]._current);
+                        if (TaskService.getInstance().taskList[1]._current == 10) {
+                            TaskService.getInstance().finish(TaskService.getInstance().taskList[1].id);
+                        }
+                    }
+                }, this);
                 killButton.touchEnabled = true;
                 break;
         }

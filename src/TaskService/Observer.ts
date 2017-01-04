@@ -31,7 +31,7 @@ class TaskPanel extends egret.DisplayObjectContainer implements Observer {
                     break;
                 case TaskStatus.SUBMITTED:
                     this.textField.text = task.name + "finished";
-                    console.log("111");
+                    
                     break;
             }
         }

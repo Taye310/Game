@@ -8,6 +8,8 @@ class Character extends egret.DisplayObjectContainer {
     _idleState: CharacterIdleState = new CharacterIdleState(this);
     _moveState: CharacterMoveState = new CharacterMoveState(this);
 
+    timer: egret.Timer;
+
     constructor(main: Main) {
         super();
         this._main = main;
@@ -16,52 +18,56 @@ class Character extends egret.DisplayObjectContainer {
         this._main.addChild(this._body);
         this._body.width = 100;
         this._body.height = 100;
-        this._body.anchorOffsetX = this._body.width * 1;
+        this._body.anchorOffsetX = this._body.width * 0.5;
         console.log("anchorx :" + this._body.anchorOffsetX);
         this._body.anchorOffsetY = this._body.height * 0;
         this._stateMachine = new StateMachine();
-        this._body.x = this._main.stage.stageWidth * 0.1;
+        this._body.x = this._main.stage.stageWidth * 0.1 - 50;
         this._body.y = this._main.stage.stageHeight * 0.9;
         console.log(this._body.x);
         this._ifidle = true;
         this._ifmove = false;
     }
-    public stopMove(callback:Function){
+    public stopMove(callback: Function) {
         this.idle();//not complete
         callback();
     }
 
-    public move(targetX: number, targetY: number, path: TileNode[],callback:Function) {
+    public move(targetX: number, targetY: number, path: TileNode[], callback: Function) {
 
         //中止缓动动画，达到实现运动中更换目标点的目的
         egret.Tween.removeTweens(this._body);
-
+        if (this.timer != null) {
+            this.timer.stop();
+        }
         //触发状态机
         this._stateMachine.setState(this._moveState);
 
         //如果状态机将_ifwalk变量调整为true,则进入运动状态
         if (this._ifmove) {
             console.log("move");
-            if (targetX > this._body.x) {
-                this._body.skewY = 0;
-            }
-            else {
-                //this._body.skewY = 180;
-            }
             this.startMove();
 
             //用Timer来实现固定间隔顺序读取路径数组中的点并移动
-            var interval:number = 500;
-            var timer: egret.Timer = new egret.Timer(interval, path.length - 1);
-            timer.addEventListener(egret.TimerEvent.TIMER, function (e: egret.TimerEvent): void {
-                egret.Tween.get(this._body).to({ x: (path[timer.currentCount].x + 1) * 100, y: (path[timer.currentCount].y) * 100 }, 500);
-                console.log("target:" + path[timer.currentCount - 1].x + " , " + path[timer.currentCount - 1].y);
+            var interval: number = 500;
+            this.timer = new egret.Timer(interval, path.length - 1);
+            this.timer.addEventListener(egret.TimerEvent.TIMER, function (e: egret.TimerEvent): void {
+                path[-1] = path[0];
+                if ((path[this.timer.currentCount].x - path[this.timer.currentCount - 1].x) < 0) {
+                    this._body.skewY = 180;
+                } else {
+                    this._body.skewY = 0;
+                }
+                if (path.length != 0) {
+                    egret.Tween.get(this._body).to({ x: (path[this.timer.currentCount].x + 1) * 100 - 50, y: (path[this.timer.currentCount].y) * 100 }, 500);
+                    console.log("target:" + path[this.timer.currentCount - 1].x + " , " + path[this.timer.currentCount - 1].y);
+                }
             }, this);
-            timer.addEventListener(egret.TimerEvent.TIMER_COMPLETE, function (e: egret.TimerEvent): void {
+            this.timer.addEventListener(egret.TimerEvent.TIMER_COMPLETE, function (e: egret.TimerEvent): void {
                 this.idle();
                 callback();////////////////////////////
             }, this);
-            timer.start();
+            this.timer.start();
             console.log(path.length);
         }
     }

@@ -24,12 +24,10 @@ class NPC extends egret.DisplayObjectContainer implements Observer {
         for (var i = 0; i < TaskService.getInstance().taskList.length; i++) {
             if (this._id == TaskService.getInstance().taskList[i].fromNPCId) {
                 this._emoji.texture = RES.getRes("ytanhao_png");
-                console.log("emoji")
             }
         }
         this._emoji.touchEnabled = true;
         this._chara.touchEnabled = true;
-        console.log("npc");
         this.addChild(this._chara);
         this.addChild(this._emoji);
 
@@ -39,12 +37,14 @@ class NPC extends egret.DisplayObjectContainer implements Observer {
     }
 
     private onNPCClick(e: egret.TouchEvent) {
-        var startx: number = Math.floor((GameScene.chara._body.x) / 100);
+        var startx: number = Math.floor((GameScene.chara._body.x+50) / 100);
         var starty: number = Math.floor(GameScene.chara._body.y / 100);
         var endx: number = Math.floor(e.stageX / 100);
         var endy: number = Math.floor(e.stageY / 100);
         var path: TileNode[] = GameScene.map.astarPath(startx - 1, starty, endx, endy);
-        this._main.list.addCommand(new WalkCommand(GameScene.chara, e.localX, e.localY, path));
+        if(path.length!=0){
+            this._main.list.addCommand(new WalkCommand(GameScene.chara, e.localX, e.localY, path));
+        }
         //console.log(endx);
         this._main.list.addCommand(new TalkCommand(this));
         this._main.list.execute();
@@ -70,6 +70,7 @@ class NPC extends egret.DisplayObjectContainer implements Observer {
         ////////////////////////////////////////////////////////////////放到command里了
     }
     public onChange(task: Task) {
+        
         switch (task.status) {
             case TaskStatus.ACCEPTABLE:
                 //useless

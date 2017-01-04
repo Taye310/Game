@@ -112,6 +112,10 @@ class Main extends egret.DisplayObjectContainer {
 
     private textfield: egret.TextField;
     public list = new CommandList();
+    public panel = new Panel();
+    public bagState: boolean = false;
+
+    public killCount: egret.TextField;
     /**
      * 创建游戏场景
      * Create a game scene
@@ -130,34 +134,31 @@ class Main extends egret.DisplayObjectContainer {
 
         /////////////////////背包按钮
         var bag = new egret.TextField;
-        var bagState: boolean = false;
+
         bag.text = "bag";
         bag.x = 900;
         bag.y = 900;
         bag.textColor = 0x000000;
         this.addChild(bag);
-        var panel = new Panel();
+        this.panel.touchEnabled = true;
         bag.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
-            if (bagState == false) {
-                this.addChild(panel);
-                bagState = true;
-            } else if (bagState == true) {
-                this.removeChild(panel);
-                bagState=false;
+            if (this.bagState == false) {
+                this.addChild(this.panel);
+                this.bagState = true;
+            } else if (this.bagState == true) {
+                this.removeChild(this.panel);
+                this.bagState = false;
             }
 
         }, this)
         bag.touchEnabled = true;
 
+        this.killCount = new egret.TextField;
+        this.killCount.text = "Killed 0";
+        this.killCount.y = 50;
+        this.addChild(this.killCount);
     }
 
-    public onButtonClick(e: egret.TouchEvent) {
-        TaskService.getInstance().taskList[1]._current++;
-        console.log(TaskService.getInstance().taskList[1]._current)
-        if (TaskService.getInstance().taskList[1]._current == 10) {
-            TaskService.getInstance().finish(TaskService.getInstance().taskList[1].id);
-        }
-    }
 
     /**
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
@@ -185,28 +186,16 @@ class CommandList {
     }
 
     cancel() {
-        this._frozen = true;
-        var command = this.currentCommand;
-        egret.setTimeout(() => {
-            if (this._frozen) {
-                this._frozen = false;
-            }
-
-        }, this, 2000);
-        if (command) {
-            command.cancel(() => {
-                this._frozen = false;
-            });
-            this._list = [];
-        }
-
+        //this.currentCommand=this._list.pop();
+        this._list = [];
+        
+        // this.currentCommand.cancel(()=>{
+        //     console.log("///////////////////////////////")
+        // });
+        
     }
 
     execute() {
-        if (this._frozen) {
-            egret.setTimeout(this.execute, this, 100);
-            return;
-        }
 
         var command = this._list.shift();
         this.currentCommand = command;

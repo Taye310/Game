@@ -24,6 +24,7 @@ var KillMonsterTaskCondition = (function (_super) {
     p.onSubmit = function (task) {
     };
     p.onChange = function (task) {
+        task.current++;
     };
     return KillMonsterTaskCondition;
 }(SenceService));

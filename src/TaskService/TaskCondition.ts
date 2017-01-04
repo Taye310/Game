@@ -8,7 +8,7 @@ interface TaskCondition {
 }
 
 class NPCTalkTaskCondition implements TaskCondition {
-    public onAccept(task: TaskConditionContext) {
+    onAccept(task: TaskConditionContext) {
         task.current++;
         //task.checkStatus();
     }
@@ -34,7 +34,7 @@ class KillMonsterTaskCondition extends SenceService implements TaskCondition {
     }
 
     onChange(task: TaskConditionContext) {
-
+        task.current++;
     }
 }
 
