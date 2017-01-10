@@ -18,11 +18,12 @@ var NPC = (function (_super) {
         this._emoji.scaleY = 2;
         this._emoji.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onNPCClick, this);
         this._chara.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onNPCClick, this);
-        for (var i = 0; i < TaskService.getInstance().taskList.length; i++) {
-            if (this._id == TaskService.getInstance().taskList[i].fromNPCId) {
-                this._emoji.texture = RES.getRes("ytanhao_png");
-            }
-        }
+        // for (var i = 0; i < TaskService.getInstance().taskList.length; i++) {
+        //     if (this._id == TaskService.getInstance().taskList[i].fromNPCId) {
+        //         this._emoji.texture = RES.getRes("ytanhao_png");
+        //     }
+        // }
+        this.onChange(TaskService.getInstance().taskList[0]);
         this._emoji.touchEnabled = true;
         this._chara.touchEnabled = true;
         this.addChild(this._chara);
@@ -36,11 +37,17 @@ var NPC = (function (_super) {
         var endx = Math.floor(e.stageX / 100);
         var endy = Math.floor(e.stageY / 100);
         var path = GameScene.map.astarPath(startx - 1, starty, endx, endy);
-        if (path.length != 0) {
+        if (path.length != 1) {
             this._main.list.addCommand(new WalkCommand(GameScene.chara, e.localX, e.localY, path));
         }
         //console.log(endx);
-        this._main.list.addCommand(new TalkCommand(this));
+        if (this._id == TaskService.getInstance().taskList[0].fromNPCId && NPC.isStart == false) {
+            NPC.isStart = true;
+            this._main.list.addCommand(new TalkCommand(this));
+        }
+        else if (this._id == TaskService.getInstance().taskList[0].toNPCId && NPC.isStart == true) {
+            this._main.list.addCommand(new TalkCommand(this));
+        }
         this._main.list.execute();
         // for (var i = 0; i < TaskService.getInstance().taskList.length; i++) {
         //     switch (TaskService.getInstance().taskList[i].status) {
@@ -65,10 +72,19 @@ var NPC = (function (_super) {
     p.onChange = function (task) {
         switch (task.status) {
             case TaskStatus.ACCEPTABLE:
-                //useless
+                for (var i = 0; i < TaskService.getInstance().taskList.length; i++) {
+                    if (this._id == TaskService.getInstance().taskList[i].fromNPCId) {
+                        this._emoji.texture = RES.getRes("ytanhao_png");
+                    }
+                }
                 break;
             case TaskStatus.DURING:
-                this._emoji.texture = RES.getRes("gwenhao_png");
+                if (task.fromNPCId == this._id) {
+                    this._emoji.texture = null;
+                }
+                else if (task.toNPCId == this._id) {
+                    this._emoji.texture = RES.getRes("gwenhao_png");
+                }
                 break;
             case TaskStatus.CAN_SUMBIT:
                 //useless
@@ -90,6 +106,7 @@ var NPC = (function (_super) {
         //     this._emoji.texture = RES.getRes(null);
         // }
     };
+    NPC.isStart = false;
     return NPC;
 }(egret.DisplayObjectContainer));
 egret.registerClass(NPC,'NPC',["Observer"]);

@@ -26,22 +26,25 @@ var WalkCommand = (function () {
 }());
 egret.registerClass(WalkCommand,'WalkCommand',["Command"]);
 var FightCommand = (function () {
-    function FightCommand() {
+    function FightCommand(main) {
         /**
          * 所有的 Command 都需要有这个标记，应该如何封装处理这个问题呢？
          */
         this._hasBeenCancelled = false;
+        this._main = main;
     }
     var d = __define,c=FightCommand,p=c.prototype;
     p.execute = function (callback) {
-        var _this = this;
         console.log("开始战斗");
-        egret.setTimeout(function () {
-            if (!_this._hasBeenCancelled) {
-                console.log("结束战斗");
-                callback();
+        if (TaskService.getInstance().taskList[1].status == TaskStatus.DURING) {
+            TaskService.getInstance().taskList[1]._current++;
+            this._main.killCount.text = "Killed " + TaskService.getInstance().taskList[1]._current;
+            console.log(TaskService.getInstance().taskList[1]._current);
+            if (TaskService.getInstance().taskList[1]._current == 10) {
+                TaskService.getInstance().finish(TaskService.getInstance().taskList[1].id);
             }
-        }, this, 500);
+            console.log("开始结束");
+        }
     };
     p.cancel = function (callback) {
         console.log("脱离战斗");
@@ -63,7 +66,7 @@ var TalkCommand = (function () {
         for (var i = 0; i < TaskService.getInstance().taskList.length; i++) {
             switch (TaskService.getInstance().taskList[i].status) {
                 case TaskStatus.ACCEPTABLE:
-                    if (this._npc.state == false) {
+                    if (this._npc.state == false && this._npc._id == TaskService.getInstance().taskList[i].fromNPCId) {
                         var dialogPanel = new DialoguePanel(this._npc._chara);
                         this._npc.addChild(dialogPanel);
                         this._npc.state = true;

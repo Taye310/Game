@@ -7,24 +7,24 @@ interface Command {
 }
 
 class WalkCommand implements Command {
-    private chara:Character;
+    private chara: Character;
     private x;
     private y;
-    private path:TileNode[];
+    private path: TileNode[];
 
-    constructor(chara:Character,x: number, y: number,path:TileNode[]) {
+    constructor(chara: Character, x: number, y: number, path: TileNode[]) {
         this.x = x;
         this.y = y;
-        this.chara=chara;
-        this.path=path;
-        
+        this.chara = chara;
+        this.path = path;
+
     }
 
     execute(callback: Function): void {
         // GameScene.getCurrentScene().moveTo(this.x, this.y, function () {
         //     callback();
         // })
-        this.chara.move(this.x, this.y, this.path,function(){
+        this.chara.move(this.x, this.y, this.path, function () {
             callback();
         });
     }
@@ -33,7 +33,7 @@ class WalkCommand implements Command {
         // GameScene.getCurrentScene().stopMove(function () {
         //     callback();
         // })
-        this.chara.stopMove(function(){
+        this.chara.stopMove(function () {
             callback();
         })
     }
@@ -44,16 +44,23 @@ class FightCommand implements Command {
      * 所有的 Command 都需要有这个标记，应该如何封装处理这个问题呢？
      */
     private _hasBeenCancelled = false;
+    _main:Main;
+
+    constructor(main:Main){
+        this._main=main;
+    }
 
     execute(callback: Function): void {
-
         console.log("开始战斗")
-        egret.setTimeout(() => {
-            if (!this._hasBeenCancelled) {
-                console.log("结束战斗")
-                callback();
+        if (TaskService.getInstance().taskList[1].status == TaskStatus.DURING) {
+            TaskService.getInstance().taskList[1]._current++;
+            this._main.killCount.text = "Killed " + TaskService.getInstance().taskList[1]._current;
+            console.log(TaskService.getInstance().taskList[1]._current)
+            if (TaskService.getInstance().taskList[1]._current == 10) {
+                TaskService.getInstance().finish(TaskService.getInstance().taskList[1].id);
             }
-        }, this, 500)
+            console.log("开始结束")
+        }
     }
 
     cancel(callback: Function) {
@@ -68,10 +75,10 @@ class FightCommand implements Command {
 
 class TalkCommand implements Command {
 
-    _npc:NPC
+    _npc: NPC
 
-    constructor(npc:NPC){
-        this._npc=npc;
+    constructor(npc: NPC) {
+        this._npc = npc;
     }
 
     execute(callback: Function): void {
@@ -79,7 +86,7 @@ class TalkCommand implements Command {
         for (var i = 0; i < TaskService.getInstance().taskList.length; i++) {
             switch (TaskService.getInstance().taskList[i].status) {
                 case TaskStatus.ACCEPTABLE:
-                    if (this._npc.state == false) {
+                    if (this._npc.state == false&&this._npc._id==TaskService.getInstance().taskList[i].fromNPCId) {
                         var dialogPanel = new DialoguePanel(this._npc._chara);
                         this._npc.addChild(dialogPanel);
                         this._npc.state = true;

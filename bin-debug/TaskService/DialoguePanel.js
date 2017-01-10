@@ -44,8 +44,8 @@ var DialoguePanel = (function (_super) {
                     break;
                 case TaskStatus.CAN_SUMBIT:
                     this._textField.text = "已完成！";
-                    TaskService.getInstance().finish(TaskService.getInstance().taskList[i].id);
                     TaskService.getInstance().taskList[1].status = TaskStatus.ACCEPTABLE;
+                    TaskService.getInstance().finish(TaskService.getInstance().taskList[i].id);
                     egret.setTimeout(function () {
                         _this.removeChild(_this.panel);
                         _this.removeChild(_this._textField);

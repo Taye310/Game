@@ -43,16 +43,16 @@ class DialoguePanel extends egret.DisplayObjectContainer {
                     break;
                 case TaskStatus.CAN_SUMBIT:
                     this._textField.text = "已完成！";
-                    TaskService.getInstance().finish(TaskService.getInstance().taskList[i].id);
                     TaskService.getInstance().taskList[1].status = TaskStatus.ACCEPTABLE;
+                    TaskService.getInstance().finish(TaskService.getInstance().taskList[i].id);
                     egret.setTimeout(() => {
                         this.removeChild(this.panel);
                         this.removeChild(this._textField);
                         this.removeChild(this._button);
+
                     }, this, 3000);
                     break;
             }
         }
     }
-
 }

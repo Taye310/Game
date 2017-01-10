@@ -4,9 +4,10 @@ var TaskPanel = (function (_super) {
         _super.call(this);
         this.textField = new egret.TextField;
         this.panel = new egret.Shape;
-        this.panel.x = 0;
+        this.panel.x = 700;
         this.panel.y = 0;
         this.textField.text = "----";
+        this.textField.x = 700;
         this.panel.graphics.clear();
         this.panel.graphics.beginFill(0x000000, 0.5);
         this.panel.graphics.drawRect(0, 0, 250, 300);

@@ -133,7 +133,8 @@ var Main = (function (_super) {
         }, this);
         bag.touchEnabled = true;
         this.killCount = new egret.TextField;
-        this.killCount.text = "Killed 0";
+        this.killCount.text = "";
+        this.killCount.x = 700;
         this.killCount.y = 50;
         this.addChild(this.killCount);
     };

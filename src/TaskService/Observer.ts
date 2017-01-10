@@ -10,9 +10,10 @@ class TaskPanel extends egret.DisplayObjectContainer implements Observer {
 
     constructor() {
         super();
-        this.panel.x = 0;
+        this.panel.x = 700;
         this.panel.y = 0;
         this.textField.text = "----";
+        this.textField.x=700;
         this.panel.graphics.clear();
         
         this.panel.graphics.beginFill(0x000000, 0.5);
@@ -31,7 +32,6 @@ class TaskPanel extends egret.DisplayObjectContainer implements Observer {
                     break;
                 case TaskStatus.SUBMITTED:
                     this.textField.text = task.name + "finished";
-                    
                     break;
             }
         }
