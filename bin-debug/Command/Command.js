@@ -1,3 +1,6 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
 var WalkCommand = (function () {
     function WalkCommand(chara, x, y, path) {
         this.x = x;
@@ -5,8 +8,7 @@ var WalkCommand = (function () {
         this.chara = chara;
         this.path = path;
     }
-    var d = __define,c=WalkCommand,p=c.prototype;
-    p.execute = function (callback) {
+    WalkCommand.prototype.execute = function (callback) {
         // GameScene.getCurrentScene().moveTo(this.x, this.y, function () {
         //     callback();
         // })
@@ -14,7 +16,7 @@ var WalkCommand = (function () {
             callback();
         });
     };
-    p.cancel = function (callback) {
+    WalkCommand.prototype.cancel = function (callback) {
         // GameScene.getCurrentScene().stopMove(function () {
         //     callback();
         // })
@@ -24,7 +26,7 @@ var WalkCommand = (function () {
     };
     return WalkCommand;
 }());
-egret.registerClass(WalkCommand,'WalkCommand',["Command"]);
+__reflect(WalkCommand.prototype, "WalkCommand", ["Command"]);
 var FightCommand = (function () {
     function FightCommand(main) {
         /**
@@ -33,8 +35,7 @@ var FightCommand = (function () {
         this._hasBeenCancelled = false;
         this._main = main;
     }
-    var d = __define,c=FightCommand,p=c.prototype;
-    p.execute = function (callback) {
+    FightCommand.prototype.execute = function (callback) {
         console.log("开始战斗");
         if (TaskService.getInstance().taskList[1].status == TaskStatus.DURING) {
             TaskService.getInstance().taskList[1]._current++;
@@ -46,7 +47,7 @@ var FightCommand = (function () {
             console.log("开始结束");
         }
     };
-    p.cancel = function (callback) {
+    FightCommand.prototype.cancel = function (callback) {
         console.log("脱离战斗");
         this._hasBeenCancelled = true;
         egret.setTimeout(function () {
@@ -55,13 +56,12 @@ var FightCommand = (function () {
     };
     return FightCommand;
 }());
-egret.registerClass(FightCommand,'FightCommand',["Command"]);
+__reflect(FightCommand.prototype, "FightCommand", ["Command"]);
 var TalkCommand = (function () {
     function TalkCommand(npc) {
         this._npc = npc;
     }
-    var d = __define,c=TalkCommand,p=c.prototype;
-    p.execute = function (callback) {
+    TalkCommand.prototype.execute = function (callback) {
         //console.log("打开对话框")
         for (var i = 0; i < TaskService.getInstance().taskList.length; i++) {
             switch (TaskService.getInstance().taskList[i].status) {
@@ -87,10 +87,10 @@ var TalkCommand = (function () {
             callback();
         }, this, 500);
     };
-    p.cancel = function (callback) {
+    TalkCommand.prototype.cancel = function (callback) {
         console.log("关闭对话框");
     };
     return TalkCommand;
 }());
-egret.registerClass(TalkCommand,'TalkCommand',["Command"]);
+__reflect(TalkCommand.prototype, "TalkCommand", ["Command"]);
 //# sourceMappingURL=Command.js.map

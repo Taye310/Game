@@ -1,3 +1,6 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
 var AStar = (function () {
     function AStar() {
         this._openList = []; //Array<TileNode>//
@@ -7,8 +10,7 @@ var AStar = (function () {
         this._straightCost = 1.0;
         this._diagCost = Math.SQRT2;
     }
-    var d = __define,c=AStar,p=c.prototype;
-    p.findPath = function (grid) {
+    AStar.prototype.findPath = function (grid) {
         this._grid = grid;
         this._openList = new Array();
         this._closedList = new Array();
@@ -19,7 +21,7 @@ var AStar = (function () {
         this._startNode.f = this._startNode.g + this._startNode.h;
         return this.search();
     };
-    p.search = function () {
+    AStar.prototype.search = function () {
         var currentNode = this._startNode;
         while (currentNode != this._endNode) {
             var startX = Math.max(0, currentNode.x - 1);
@@ -81,7 +83,7 @@ var AStar = (function () {
         this.buildPath();
         return true;
     };
-    p.isOpen = function (node) {
+    AStar.prototype.isOpen = function (node) {
         for (var i = 0; i < this._openList.length; i++) {
             if (this._openList[i] == node) {
                 return true;
@@ -90,7 +92,7 @@ var AStar = (function () {
         return false;
         //return this._openList.indexOf(node) > 0 ? true : false;
     };
-    p.isClosed = function (node) {
+    AStar.prototype.isClosed = function (node) {
         for (var i = 0; i < this._closedList.length; i++) {
             if (this._closedList[i] == node) {
                 return true;
@@ -99,7 +101,7 @@ var AStar = (function () {
         return false;
         //return this._closedList.indexOf(node) > 0 ? true : false;
     };
-    p.buildPath = function () {
+    AStar.prototype.buildPath = function () {
         this._path = new Array();
         var node = this._endNode;
         this._path.push(node);
@@ -108,25 +110,25 @@ var AStar = (function () {
             this._path.unshift(node); //开头加入
         }
     };
-    p.manhattan = function (node) {
+    AStar.prototype.manhattan = function (node) {
         return Math.abs(this._endNode.x - node.x) * this._straightCost + Math.abs(this._endNode.y - node.y) * this._straightCost;
     };
-    p.euclidian = function (node) {
+    AStar.prototype.euclidian = function (node) {
         var dx = this._endNode.x - node.x;
         var dy = this._endNode.y - node.y;
         return Math.sqrt(dx * dx + dy * dy) * this._straightCost;
     };
-    p.diagonal = function (node) {
+    AStar.prototype.diagonal = function (node) {
         var dx = Math.abs(this._endNode.x - node.x);
         var dy = Math.abs(this._endNode.y - node.y);
         var diag = Math.min(dx, dy);
         var straight = dx + dy;
         return this._diagCost * diag + this._straightCost * (straight - 2 * diag);
     };
-    p.visited = function () {
+    AStar.prototype.visited = function () {
         return this._closedList.concat(this._openList);
     };
-    p.validNode = function (node, currentNode) {
+    AStar.prototype.validNode = function (node, currentNode) {
         if (currentNode == node || !node.walkable)
             return false;
         if (!this._grid._arr[currentNode.x][node.y].walkable)
@@ -135,10 +137,10 @@ var AStar = (function () {
             return false;
         return true;
     };
-    p.getPath = function () {
+    AStar.prototype.getPath = function () {
         return this._path;
     };
     return AStar;
 }());
-egret.registerClass(AStar,'AStar');
+__reflect(AStar.prototype, "AStar");
 //# sourceMappingURL=AStar.js.map

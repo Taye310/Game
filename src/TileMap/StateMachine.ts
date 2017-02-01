@@ -17,13 +17,13 @@ interface state {
     onExit(): void;
 }
 
-class CharacterState extends StateMachine {
+class CharacterState implements state {
 
     //为了下面设置Character类的变量
     _character: Character;
 
     constructor(character: Character) {
-        super();
+        //super();
         this._character = character;
     }
 

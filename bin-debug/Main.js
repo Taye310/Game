@@ -26,17 +26,25 @@
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var Main = (function (_super) {
     __extends(Main, _super);
     function Main() {
-        _super.call(this);
-        this.list = new CommandList();
-        this.panel = new Panel();
-        this.bagState = false;
-        this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
+        var _this = _super.call(this) || this;
+        _this.list = new CommandList();
+        _this.panel = new Panel();
+        _this.bagState = false;
+        _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddToStage, _this);
+        return _this;
     }
-    var d = __define,c=Main,p=c.prototype;
-    p.onAddToStage = function (event) {
+    Main.prototype.onAddToStage = function (event) {
         //设置加载进度界面
         //Config to load process interface
         this.loadingView = new LoadingUI();
@@ -50,7 +58,7 @@ var Main = (function (_super) {
      * 配置文件加载完成,开始预加载preload资源组。
      * configuration file loading is completed, start to pre-load the preload resource group
      */
-    p.onConfigComplete = function (event) {
+    Main.prototype.onConfigComplete = function (event) {
         RES.removeEventListener(RES.ResourceEvent.CONFIG_COMPLETE, this.onConfigComplete, this);
         RES.addEventListener(RES.ResourceEvent.GROUP_COMPLETE, this.onResourceLoadComplete, this);
         RES.addEventListener(RES.ResourceEvent.GROUP_LOAD_ERROR, this.onResourceLoadError, this);
@@ -62,7 +70,7 @@ var Main = (function (_super) {
      * preload资源组加载完成
      * Preload resource group is loaded
      */
-    p.onResourceLoadComplete = function (event) {
+    Main.prototype.onResourceLoadComplete = function (event) {
         if (event.groupName == "preload") {
             this.stage.removeChild(this.loadingView);
             RES.removeEventListener(RES.ResourceEvent.GROUP_COMPLETE, this.onResourceLoadComplete, this);
@@ -76,14 +84,14 @@ var Main = (function (_super) {
      * 资源组加载出错
      *  The resource group loading failed
      */
-    p.onItemLoadError = function (event) {
+    Main.prototype.onItemLoadError = function (event) {
         console.warn("Url:" + event.resItem.url + " has failed to load");
     };
     /**
      * 资源组加载出错
      *  The resource group loading failed
      */
-    p.onResourceLoadError = function (event) {
+    Main.prototype.onResourceLoadError = function (event) {
         //TODO
         console.warn("Group:" + event.groupName + " has failed to load");
         //忽略加载失败的项目
@@ -94,7 +102,7 @@ var Main = (function (_super) {
      * preload资源组加载进度
      * Loading process of preload resource group
      */
-    p.onResourceProgress = function (event) {
+    Main.prototype.onResourceProgress = function (event) {
         if (event.groupName == "preload") {
             this.loadingView.setProgress(event.itemsLoaded, event.itemsTotal);
         }
@@ -103,7 +111,7 @@ var Main = (function (_super) {
      * 创建游戏场景
      * Create a game scene
      */
-    p.createGameScene = function () {
+    Main.prototype.createGameScene = function () {
         var _this = this;
         var mainScene = new GameScene("MainScene", this);
         GameScene.replaceScene(mainScene);
@@ -142,7 +150,7 @@ var Main = (function (_super) {
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
      * Create a Bitmap object according to name keyword.As for the property of name please refer to the configuration file of resources/resource.json.
      */
-    p.createBitmapByName = function (name) {
+    Main.prototype.createBitmapByName = function (name) {
         var result = new egret.Bitmap();
         var texture = RES.getRes(name);
         result.texture = texture;
@@ -150,24 +158,23 @@ var Main = (function (_super) {
     };
     return Main;
 }(egret.DisplayObjectContainer));
-egret.registerClass(Main,'Main');
+__reflect(Main.prototype, "Main");
 var CommandList = (function () {
     function CommandList() {
         this._list = [];
         this._frozen = false;
     }
-    var d = __define,c=CommandList,p=c.prototype;
-    p.addCommand = function (command) {
+    CommandList.prototype.addCommand = function (command) {
         this._list.push(command);
     };
-    p.cancel = function () {
+    CommandList.prototype.cancel = function () {
         //this.currentCommand=this._list.pop();
         this._list = [];
         // this.currentCommand.cancel(()=>{
         //     console.log("///////////////////////////////")
         // });
     };
-    p.execute = function () {
+    CommandList.prototype.execute = function () {
         var _this = this;
         var command = this._list.shift();
         this.currentCommand = command;
@@ -183,5 +190,5 @@ var CommandList = (function () {
     };
     return CommandList;
 }());
-egret.registerClass(CommandList,'CommandList');
+__reflect(CommandList.prototype, "CommandList");
 //# sourceMappingURL=Main.js.map

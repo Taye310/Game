@@ -1,24 +1,31 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var EventEmitter = (function (_super) {
     __extends(EventEmitter, _super);
     function EventEmitter() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
-    var d = __define,c=EventEmitter,p=c.prototype;
-    p.addObserver = function (observer) {
+    EventEmitter.prototype.addObserver = function (observer) {
     };
-    p.notify = function (task) {
+    EventEmitter.prototype.notify = function (task) {
     };
     return EventEmitter;
 }(egret.DisplayObjectContainer));
-egret.registerClass(EventEmitter,'EventEmitter');
+__reflect(EventEmitter.prototype, "EventEmitter");
 var TaskService = (function (_super) {
     __extends(TaskService, _super);
     function TaskService() {
-        _super.call(this);
-        this.observerList = new Array();
-        this.taskList = new Array();
+        var _this = _super.call(this) || this;
+        _this.observerList = new Array();
+        _this.taskList = new Array();
+        return _this;
     }
-    var d = __define,c=TaskService,p=c.prototype;
     //danli
     TaskService.getInstance = function () {
         if (this.instance == null) {
@@ -26,9 +33,9 @@ var TaskService = (function (_super) {
         }
         return this.instance;
     };
-    p.onChange = function (task) {
+    TaskService.prototype.onChange = function (task) {
     };
-    p.accept = function (id) {
+    TaskService.prototype.accept = function (id) {
         if (!id) {
             return ErrorCode.FAILED;
         }
@@ -42,7 +49,7 @@ var TaskService = (function (_super) {
             return ErrorCode.FAILED;
         }
     };
-    p.finish = function (id) {
+    TaskService.prototype.finish = function (id) {
         if (!id) {
             return ErrorCode.FAILED;
         }
@@ -56,7 +63,7 @@ var TaskService = (function (_super) {
             return ErrorCode.FAILED;
         }
     };
-    p.getTaskByCustomRole = function (rule) {
+    TaskService.prototype.getTaskByCustomRole = function (rule) {
         return rule();
     };
     TaskService.notify = function (task) {
@@ -73,8 +80,8 @@ var TaskService = (function (_super) {
         }
         TaskService.getInstance().observerList.push(observer);
     };
-    TaskService.instance = null;
     return TaskService;
 }(EventEmitter));
-egret.registerClass(TaskService,'TaskService',["Observer"]);
+TaskService.instance = null;
+__reflect(TaskService.prototype, "TaskService", ["Observer"]);
 //# sourceMappingURL=EventEmitter.js.map

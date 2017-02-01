@@ -1,74 +1,82 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var Panel = (function (_super) {
     __extends(Panel, _super);
     function Panel() {
-        _super.call(this);
-        this.McCree = new Hero("McCree", true);
-        this.Soilder76 = new Hero("Soilder76", true);
-        this.Tracer = new Hero("Tracer", true);
-        this.sword = new Equipments("sword", 50);
-        this.armor = new Equipments("armor", 10);
-        this.gun = new Equipments("gun", 70);
-        this.dog = new Pet("baiyukun");
-        this.blueJewel = new Jewel("blueJewel");
-        this.level = new egret.TextField;
-        this.hp = new egret.TextField;
-        this.fightPower = new egret.TextField;
-        this.heroInTeam = new egret.TextField;
-        this.equipments = new egret.TextField;
-        this.jewel = new egret.TextField;
-        this.pet = new egret.TextField;
-        this.bag1 = new egret.TextField;
-        this.bag2 = new egret.TextField;
-        this.bag3 = new egret.TextField;
-        this.propertyPanel = new egret.Shape;
-        this.bagPanel = new egret.Shape;
-        this.propertyPanel.x = 0;
-        this.propertyPanel.y = 0;
-        this.propertyPanel.graphics.beginFill(0x000000, 0.5);
-        this.propertyPanel.graphics.drawRect(0, 0, 400, 600);
-        this.propertyPanel.graphics.endFill();
-        this.addChild(this.propertyPanel);
-        this.bagPanel.x = 100;
-        this.bagPanel.y = 700;
-        this.bagPanel.graphics.beginFill(0x000000, 0.5);
-        this.bagPanel.graphics.drawRect(0, 0, 600, 100);
-        this.bagPanel.graphics.endFill();
-        this.addChild(this.bagPanel);
+        var _this = _super.call(this) || this;
+        _this.McCree = new Hero("McCree", true);
+        _this.Soilder76 = new Hero("Soilder76", true);
+        _this.Tracer = new Hero("Tracer", true);
+        _this.sword = new Equipments("sword", 50);
+        _this.armor = new Equipments("armor", 10);
+        _this.gun = new Equipments("gun", 70);
+        _this.dog = new Pet("baiyukun");
+        _this.blueJewel = new Jewel("blueJewel");
+        _this.level = new egret.TextField;
+        _this.hp = new egret.TextField;
+        _this.fightPower = new egret.TextField;
+        _this.heroInTeam = new egret.TextField;
+        _this.equipments = new egret.TextField;
+        _this.jewel = new egret.TextField;
+        _this.pet = new egret.TextField;
+        _this.bag1 = new egret.TextField;
+        _this.bag2 = new egret.TextField;
+        _this.bag3 = new egret.TextField;
+        _this.propertyPanel = new egret.Shape;
+        _this.bagPanel = new egret.Shape;
+        _this.propertyPanel.x = 0;
+        _this.propertyPanel.y = 0;
+        _this.propertyPanel.graphics.beginFill(0x000000, 0.5);
+        _this.propertyPanel.graphics.drawRect(0, 0, 400, 600);
+        _this.propertyPanel.graphics.endFill();
+        _this.addChild(_this.propertyPanel);
+        _this.bagPanel.x = 100;
+        _this.bagPanel.y = 700;
+        _this.bagPanel.graphics.beginFill(0x000000, 0.5);
+        _this.bagPanel.graphics.drawRect(0, 0, 600, 100);
+        _this.bagPanel.graphics.endFill();
+        _this.addChild(_this.bagPanel);
         //初始化用户状态
-        User.user.heroes.push(this.McCree, this.Tracer);
-        this.McCree.equipments.push(this.sword);
-        this.Soilder76.equipments.push(this.gun);
-        this.sword.jewel.push(this.blueJewel);
-        User.user.pet = this.dog;
-        this.bag1.text = "Soilder76";
-        this.bag1.textColor = 0xffffff;
-        this.bag1.x = this.bagPanel.x + 10;
-        this.bag1.y = this.bagPanel.y + 35;
+        User.user.heroes.push(_this.McCree, _this.Tracer);
+        _this.McCree.equipments.push(_this.sword);
+        _this.Soilder76.equipments.push(_this.gun);
+        _this.sword.jewel.push(_this.blueJewel);
+        User.user.pet = _this.dog;
+        _this.bag1.text = "Soilder76";
+        _this.bag1.textColor = 0xffffff;
+        _this.bag1.x = _this.bagPanel.x + 10;
+        _this.bag1.y = _this.bagPanel.y + 35;
         //mouse.enable(this.stage);
         //this.bag1.addEventListener(onmouseover)
-        this.bag1.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onBagClick, this);
-        this.bag1.touchEnabled = true;
-        this.addChild(this.bag1);
-        this.bag2.text = "armor";
-        this.bag2.textColor = 0xffffff;
-        this.bag2.x = this.bagPanel.x + 210;
-        this.bag2.y = this.bagPanel.y + 35;
-        this.bag2.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onBagClick, this);
-        this.bag2.touchEnabled = true;
-        this.addChild(this.bag2);
-        this.bag3.text = "";
-        this.bag3.textColor = 0xffffff;
-        this.bag3.x = this.bagPanel.x + 410;
-        this.bag3.y = this.bagPanel.y + 35;
-        this.bag3.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onBagClick, this);
-        this.bag3.touchEnabled = true;
-        this.addChild(this.bag3);
-        this.init();
-        this.heroInTeam.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onHeroesClick, this);
-        this.heroInTeam.touchEnabled = true;
+        _this.bag1.addEventListener(egret.TouchEvent.TOUCH_TAP, _this.onBagClick, _this);
+        _this.bag1.touchEnabled = true;
+        _this.addChild(_this.bag1);
+        _this.bag2.text = "armor";
+        _this.bag2.textColor = 0xffffff;
+        _this.bag2.x = _this.bagPanel.x + 210;
+        _this.bag2.y = _this.bagPanel.y + 35;
+        _this.bag2.addEventListener(egret.TouchEvent.TOUCH_TAP, _this.onBagClick, _this);
+        _this.bag2.touchEnabled = true;
+        _this.addChild(_this.bag2);
+        _this.bag3.text = "";
+        _this.bag3.textColor = 0xffffff;
+        _this.bag3.x = _this.bagPanel.x + 410;
+        _this.bag3.y = _this.bagPanel.y + 35;
+        _this.bag3.addEventListener(egret.TouchEvent.TOUCH_TAP, _this.onBagClick, _this);
+        _this.bag3.touchEnabled = true;
+        _this.addChild(_this.bag3);
+        _this.init();
+        _this.heroInTeam.addEventListener(egret.TouchEvent.TOUCH_TAP, _this.onHeroesClick, _this);
+        _this.heroInTeam.touchEnabled = true;
+        return _this;
     }
-    var d = __define,c=Panel,p=c.prototype;
-    p.init = function () {
+    Panel.prototype.init = function () {
         var _this = this;
         this.level.text = "等级：" + User.user.level;
         this.addChild(this.level);
@@ -94,7 +102,7 @@ var Panel = (function (_super) {
         this.pet.text = "宠物：" + User.user.pet.petName;
         this.addChild(this.pet);
     };
-    p.onBagClick = function (e) {
+    Panel.prototype.onBagClick = function (e) {
         console.log(e.target.text);
         if (e.target.text == "Soilder76") {
             User.user.heroes.push(this.Soilder76);
@@ -114,7 +122,7 @@ var Panel = (function (_super) {
         }
         this.init();
     };
-    p.onHeroesClick = function (e) {
+    Panel.prototype.onHeroesClick = function (e) {
         if (this.bag1.text == "") {
             this.bag1.text = User.user.heroes.pop().heroName;
         }
@@ -129,9 +137,9 @@ var Panel = (function (_super) {
         }
         this.init();
     };
-    p.change = function (changeSth) {
+    Panel.prototype.change = function (changeSth) {
     };
     return Panel;
 }(egret.DisplayObjectContainer));
-egret.registerClass(Panel,'Panel');
+__reflect(Panel.prototype, "Panel");
 //# sourceMappingURL=Panel.js.map

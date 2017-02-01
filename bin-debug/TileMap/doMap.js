@@ -1,12 +1,20 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var doMap = (function (_super) {
     __extends(doMap, _super);
     function doMap() {
-        _super.call(this);
-        this._cellSize = 20;
-        this.astar = new AStar();
-        this._grid = new Grid(10, 10);
+        var _this = _super.call(this) || this;
+        _this._cellSize = 20;
+        _this.astar = new AStar();
+        _this._grid = new Grid(10, 10);
         var container = new egret.DisplayObjectContainer();
-        this.addChild(container);
+        _this.addChild(container);
         for (var i = 0; i < config.length; i++) {
             for (var j = 0; j < config.length; j++) {
                 var tile = config[i][j];
@@ -14,20 +22,20 @@ var doMap = (function (_super) {
                 var bitmap = new egret.Bitmap();
                 bitmap.x = j * 100;
                 bitmap.y = i * 100;
-                this.addChild(bitmap);
+                _this.addChild(bitmap);
                 if (tile == 1) {
                     bitmap.texture = RES.getRes("grass_jpg");
                 }
                 if (tile == 0) {
                     bitmap.texture = RES.getRes("road_jpg");
                 }
-                this._grid.setWalkable(i, j, tile);
+                _this._grid.setWalkable(i, j, tile);
                 container.addChild(bitmap);
             }
         }
+        return _this;
     }
-    var d = __define,c=doMap,p=c.prototype;
-    p.astarPath = function (beginX, beginY, endX, endY) {
+    doMap.prototype.astarPath = function (beginX, beginY, endX, endY) {
         var path = new Array();
         this._grid.setStartPoint(beginX, beginY);
         this._grid.setEndPoint(endX, endY);
@@ -38,7 +46,7 @@ var doMap = (function (_super) {
     };
     return doMap;
 }(egret.DisplayObjectContainer));
-egret.registerClass(doMap,'doMap');
+__reflect(doMap.prototype, "doMap");
 var config = [
     [1, 0, 1, 1, 1, 1, 0, 0, 1, 1],
     [0, 0, 0, 1, 0, 0, 0, 1, 1, 0],
@@ -49,7 +57,8 @@ var config = [
     [0, 0, 0, 0, 1, 1, 1, 0, 0, 1],
     [1, 1, 0, 0, 0, 0, 1, 0, 0, 1],
     [1, 1, 1, 1, 0, 0, 1, 1, 0, 1],
-    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]];
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]
+];
 // var config = [//map
 //     [0,0,0,0,0,0,0,0,0,0],
 //     [0,0,0,0,0,0,0,0,0,0],

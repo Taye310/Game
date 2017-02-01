@@ -1,3 +1,6 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
 var GameScene = (function () {
     function GameScene(type, main) {
         //super();
@@ -89,7 +92,6 @@ var GameScene = (function () {
                 break;
         }
     }
-    var d = __define,c=GameScene,p=c.prototype;
     GameScene.replaceScene = function (scene) {
         GameScene.scene = scene;
     };
@@ -98,5 +100,5 @@ var GameScene = (function () {
     };
     return GameScene;
 }());
-egret.registerClass(GameScene,'GameScene');
+__reflect(GameScene.prototype, "GameScene");
 //# sourceMappingURL=Scene.js.map

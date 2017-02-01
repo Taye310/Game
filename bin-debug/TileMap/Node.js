@@ -1,3 +1,6 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
 var TileNode = (function () {
     // bitmap: egret.Bitmap = null;
     function TileNode(x, y) {
@@ -11,8 +14,7 @@ var TileNode = (function () {
             this.walkable = true;
         }
     }
-    var d = __define,c=TileNode,p=c.prototype;
     return TileNode;
 }());
-egret.registerClass(TileNode,'TileNode');
+__reflect(TileNode.prototype, "TileNode");
 //# sourceMappingURL=Node.js.map

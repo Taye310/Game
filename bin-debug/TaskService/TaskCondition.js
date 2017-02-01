@@ -1,32 +1,38 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var NPCTalkTaskCondition = (function () {
     function NPCTalkTaskCondition() {
     }
-    var d = __define,c=NPCTalkTaskCondition,p=c.prototype;
-    p.onAccept = function (task) {
+    NPCTalkTaskCondition.prototype.onAccept = function (task) {
         task.current++;
         //task.checkStatus();
     };
-    p.onSubmit = function (task) {
+    NPCTalkTaskCondition.prototype.onSubmit = function (task) {
     };
-    p.onChange = function (task) {
+    NPCTalkTaskCondition.prototype.onChange = function (task) {
     };
     return NPCTalkTaskCondition;
 }());
-egret.registerClass(NPCTalkTaskCondition,'NPCTalkTaskCondition',["TaskCondition"]);
+__reflect(NPCTalkTaskCondition.prototype, "NPCTalkTaskCondition", ["TaskCondition"]);
 var KillMonsterTaskCondition = (function (_super) {
     __extends(KillMonsterTaskCondition, _super);
     function KillMonsterTaskCondition() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
-    var d = __define,c=KillMonsterTaskCondition,p=c.prototype;
-    p.onAccept = function (task) {
+    KillMonsterTaskCondition.prototype.onAccept = function (task) {
     };
-    p.onSubmit = function (task) {
+    KillMonsterTaskCondition.prototype.onSubmit = function (task) {
     };
-    p.onChange = function (task) {
+    KillMonsterTaskCondition.prototype.onChange = function (task) {
         task.current++;
     };
     return KillMonsterTaskCondition;
 }(SenceService));
-egret.registerClass(KillMonsterTaskCondition,'KillMonsterTaskCondition',["TaskCondition"]);
+__reflect(KillMonsterTaskCondition.prototype, "KillMonsterTaskCondition", ["TaskCondition"]);
 //# sourceMappingURL=TaskCondition.js.map

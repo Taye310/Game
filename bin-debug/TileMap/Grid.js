@@ -1,3 +1,6 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
 var Grid = (function () {
     function Grid(x, y) {
         this._arr = [];
@@ -12,8 +15,7 @@ var Grid = (function () {
             }
         }
     }
-    var d = __define,c=Grid,p=c.prototype;
-    p.setWalkable = function (j, i, state) {
+    Grid.prototype.setWalkable = function (j, i, state) {
         //console.log(state);
         if (state == 1) {
             this._arr[i][j].walkable = false;
@@ -29,19 +31,19 @@ var Grid = (function () {
     // public setEnd(arrEnd: TileNode) {
     //     this._end = arrEnd;
     // }
-    p.setEndPoint = function (x, y) {
+    Grid.prototype.setEndPoint = function (x, y) {
         this._end = this._arr[x][y];
     };
-    p.setStartPoint = function (x, y) {
+    Grid.prototype.setStartPoint = function (x, y) {
         this._start = this._arr[x][y];
     };
-    p.getStartPoint = function () {
+    Grid.prototype.getStartPoint = function () {
         return this._start;
     };
-    p.getEndPoint = function () {
+    Grid.prototype.getEndPoint = function () {
         return this._end;
     };
     return Grid;
 }());
-egret.registerClass(Grid,'Grid');
+__reflect(Grid.prototype, "Grid");
 //# sourceMappingURL=Grid.js.map

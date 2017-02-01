@@ -1,3 +1,6 @@
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -14,13 +17,14 @@ var User = (function () {
         this.heroes = [];
         this.level = 1;
     }
-    var d = __define,c=User,p=c.prototype;
-    d(p, "heroesInTeam"
-        ,function () {
+    Object.defineProperty(User.prototype, "heroesInTeam", {
+        get: function () {
             return this.heroes.filter(function (hero) { return hero.isInTeam; });
-        }
-    );
-    p.getFightPower = function () {
+        },
+        enumerable: true,
+        configurable: true
+    });
+    User.prototype.getFightPower = function () {
         var result = 0;
         this.heroesInTeam.forEach(function (hero) { return result += hero.getFightPower(); });
         result += this.pet.getFightPower();
@@ -28,10 +32,10 @@ var User = (function () {
         //arr.every     arr.some     arr.map     arr.foreach    arr.filter
         //大数据 map reduce
     };
-    User.user = new User();
     return User;
 }());
-egret.registerClass(User,'User');
+User.user = new User();
+__reflect(User.prototype, "User");
 var Hero = (function () {
     function Hero(heroName, isInTeam) {
         this.isInTeam = false;
@@ -43,34 +47,39 @@ var Hero = (function () {
         this.heroName = heroName;
         this.isInTeam = isInTeam;
     }
-    var d = __define,c=Hero,p=c.prototype;
-    d(p, "maxHp"
-        ,function () {
+    Object.defineProperty(Hero.prototype, "maxHp", {
+        get: function () {
             return this.level * 100 * this.quality;
-        }
-    );
-    d(p, "attack"
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Hero.prototype, "attack", {
         //attack:number=100;//游戏树枝都是高级数值 大多数    高级数值 基础数值
-        ,function () {
+        get: function () {
             var result = 0;
             this.equipments.forEach(function (e) { return result += e.attack; });
             return result;
-        }
-    );
-    d(p, "fightPower"
-        ,function () {
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Hero.prototype, "fightPower", {
+        get: function () {
             return this.getFightPower();
-        }
-    );
-    p.getFightPower = function () {
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Hero.prototype.getFightPower = function () {
         return this.maxHp * 1.5 + this.attack * 1.8; //取整 前后端统一
     };
-    __decorate([
-        Cache
-    ], p, "maxHp", null);
     return Hero;
 }());
-egret.registerClass(Hero,'Hero');
+__decorate([
+    Cache
+], Hero.prototype, "maxHp", null);
+__reflect(Hero.prototype, "Hero");
 var Equipments = (function () {
     function Equipments(name, atk) {
         this.jewel = [];
@@ -78,38 +87,39 @@ var Equipments = (function () {
         this.equipName = name;
         this.atk = atk;
     }
-    var d = __define,c=Equipments,p=c.prototype;
-    d(p, "attack"
-        ,function () {
+    Object.defineProperty(Equipments.prototype, "attack", {
+        get: function () {
             var jewelResult = 0;
             for (var i = 0; i < this.jewel.length; i++) {
                 jewelResult += this.jewel[i].attack;
             }
             return this.atk + jewelResult;
-        }
-    );
+        },
+        enumerable: true,
+        configurable: true
+    });
     return Equipments;
 }());
-egret.registerClass(Equipments,'Equipments');
+__reflect(Equipments.prototype, "Equipments");
 var Jewel = (function () {
     function Jewel(name) {
         this.jewelName = name;
     }
-    var d = __define,c=Jewel,p=c.prototype;
-    d(p, "attack"
-        ,function () {
+    Object.defineProperty(Jewel.prototype, "attack", {
+        get: function () {
             return 10;
-        }
-    );
+        },
+        enumerable: true,
+        configurable: true
+    });
     return Jewel;
 }());
-egret.registerClass(Jewel,'Jewel');
+__reflect(Jewel.prototype, "Jewel");
 var Pet = (function () {
     function Pet(name) {
         this.petName = name;
     }
-    var d = __define,c=Pet,p=c.prototype;
-    p.getFightPower = function () {
+    Pet.prototype.getFightPower = function () {
         // if(name==this.petName[0]){
         //     return 10;
         // }
@@ -120,5 +130,5 @@ var Pet = (function () {
     };
     return Pet;
 }());
-egret.registerClass(Pet,'Pet');
+__reflect(Pet.prototype, "Pet");
 //# sourceMappingURL=User.js.map
